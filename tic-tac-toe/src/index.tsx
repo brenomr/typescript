@@ -2,19 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+
+// Interface da função para o TypesCript compreender a função de componentes do React
 interface SquareProps {
-  onClick(): void;          //Recebe função em Board e recebe void de Game (handleClick), está mais para um listener component
-  value: string | null;     //value pode ser os valores null definido na array em 
+  onClick(): void;          //Recebe função em Board e nenhum retorno de handleClick no Game (void), está mais para um listener component
+  value: string | null;     //value pode ser os valores X ou O (strings) e é iniciado em null na array square 
 }
 
-/* function Square(props: SquareProps): React.FC {
-  return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
-    </button>
-  );
-} */
-
+// Função para criação dos quadrados)
 const Square: React.FC<SquareProps> = props => {
   return (
     <button className="square" onClick={props.onClick}>
@@ -23,17 +18,19 @@ const Square: React.FC<SquareProps> = props => {
   );
 }
 
+
 interface BoardProps {
   onClick(i: number): void;
-  squares: ('X' | 'O' | null)[];
+  squares: (string | null)[];
 }
 
+//Classe Board gera os 9 botões (squares). O componente <Square...> envia os props a função Square. i de onClick(i) envia o número do square clicado
 class Board extends React.Component<BoardProps> {
   renderSquare(i: number) {
     return (
-      <Square                                                             //Props enviados para Square
+      <Square                                                             
         value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}                             //i passa um número coletado no momento do 'click' para onclick
+        onClick={() => this.props.onClick(i)}
       />
     );
   }
@@ -61,19 +58,9 @@ class Board extends React.Component<BoardProps> {
   }
 }
 
-interface GameProps {
-  //history: (string | null)[];
-  //stepNumber: number;
-  //xIsNext: boolean;
-}
 
-interface GameState {
-  history: {squares: ('X' | 'O' | null)[]}[];
-  stepNumber: number;
-  xIsNext: boolean;
-}
-
-const calculateWinner = (squares: ('X' | 'O' | null)[]): 'X' | 'O' | null => {
+//Função que retorna o vencedor ou null - Foi preciso movê-la aqui, pois a declaração dela é necessária antes do seu uso
+const calculateWinner = (squares: (string | null)[]): string | null => {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -93,6 +80,17 @@ const calculateWinner = (squares: ('X' | 'O' | null)[]): 'X' | 'O' | null => {
   return null;
 };
 
+
+//A classe Game não recebe props, mas para manter a estrutura criei a interface vazia, para declarar o GameState em seguida no React.Component
+interface GameProps {
+}
+
+interface GameState {
+  history: {squares: (string | null)[]}[];
+  stepNumber: number;
+  xIsNext: boolean;
+}
+
 class Game extends React.Component<GameProps, GameState> {
   
   //Declaração dos states
@@ -109,7 +107,7 @@ class Game extends React.Component<GameProps, GameState> {
     };
   }
 
-  //Tem propósito de mudar os estados dos quadrados e gerar o histórico de jogadas, pode retornar void e alterar o state do square e o valor dentro da array square com alguma string
+  //Tem propósito de mudar os estados dos quadrados e gerar o histórico de jogadas. O state xIsNext popula a array de squares com X ou O
   handleClick(i: number) { 
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
@@ -144,8 +142,8 @@ class Game extends React.Component<GameProps, GameState> {
 
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Go to move #' + move :
-        'Go to game start';
+        'Ir para o movimento #' + move :
+        'Reiniciar o jogo';
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -155,9 +153,9 @@ class Game extends React.Component<GameProps, GameState> {
 
     let status;
     if (winner) {
-      status = "Winner: " + winner;
+      status = "Vencedor: " + winner;
     } else {
-      status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+      status = "Próximo jogador: " + (this.state.xIsNext ? "X" : "O");
     }
 
     return (
