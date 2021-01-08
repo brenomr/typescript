@@ -1,0 +1,24 @@
+{
+  "name": "appbank",
+  "version": "1.0.0",
+  "description": "Aplicação de banco para testes do typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc",
+    "start": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brenomr/typescript.git"
+  },
+  "author": "Breno Rodrigues",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brenomr/typescript/issues"
+  },
+  "homepage": "https://github.com/brenomr/typescript#readme",
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
+}
