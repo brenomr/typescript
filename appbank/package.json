@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/brenomr/typescript#readme",
   "devDependencies": {
+    "@types/jquery": "^2.0.42",
     "typescript": "^4.1.3"
   }
 }
